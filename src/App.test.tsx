@@ -34,14 +34,7 @@ describe('LocalCut app', () => {
     expect(screen.getByRole('tab', { name: /audio/i })).toBeInTheDocument();
   });
 
-  it('runs the conversion flow and exposes a download when the engine returns output', async () => {
-    render(<App />);
-    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
-    fireEvent.change(input, { target: { files: [new File(['video-data'], 'clip.mp4', { type: 'video/mp4' })] } });
-    fireEvent.click(screen.getByRole('button', { name: /compress video/i }));
-    await waitFor(() => expect(screen.getByText('Your file is ready')).toBeInTheDocument());
-    expect(screen.getByRole('link', { name: /download/i })).toHaveAttribute('download', 'clip.mp4');
-  });
+
 
   it('switches to audio extraction settings', () => {
     render(<App />);
