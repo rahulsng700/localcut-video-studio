@@ -123,11 +123,13 @@ export function getRecommendations(file: File, metadata: MediaMetadata | null): 
   return suggestions;
 }
 
+/** Build FFmpeg arguments; cropPercent crops that percentage from each edge. */
 export function buildFfmpegArgs(
   inputName: string,
   outputName: string,
   settings: ConversionSettings,
   durationSeconds: number,
+  cropPercent = 0,
 ): string[] {
   if (settings.mode === 'audio') {
     const args = ['-i', inputName, '-vn'];
@@ -141,10 +143,18 @@ export function buildFfmpegArgs(
   }
 
   const args = ['-i', inputName, '-map', '0:v:0', '-map', '0:a:0?'];
+  const filters: string[] = [];
+  const safeCropPercent = Math.max(0, Math.min(40, Math.round(cropPercent)));
+  if (safeCropPercent > 0) {
+    const remaining = (100 - safeCropPercent * 2) / 100;
+    // Round dimensions down to even pixels for yuv420p encoder compatibility.
+    filters.push(`crop=trunc(iw*${remaining}/2)*2:trunc(ih*${remaining}/2)*2`);
+  }
   if (settings.resolution !== 'original') {
     const height = Number(settings.resolution);
-    args.push('-vf', `scale=-2:min(${height}\\,ih)`);
+    filters.push(`scale=-2:min(${height}\\,ih)`);
   }
+  if (filters.length > 0) args.push('-vf', filters.join(','));
 
   if (settings.videoFormat === 'mp4') {
     args.push('-c:v', 'libx264', '-preset', 'veryfast', '-pix_fmt', 'yuv420p');
