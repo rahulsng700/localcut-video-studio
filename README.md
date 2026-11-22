@@ -1,4 +1,4 @@
-## Give it a try: https://github.com/rahulsng700/localcut-video-studio
+## Give it a try: [https://github.com/rahulsng700/localcut-video-studio](https://rahulsng700.github.io/localcut-video-studio/)
 
 # LocalCut — Local Video Studio
 
