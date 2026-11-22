@@ -1,3 +1,5 @@
+## Give it a try: https://github.com/rahulsng700/localcut-video-studio
+
 # LocalCut — Local Video Studio
 
 A static, client-side video converter built with React, TypeScript, Vite and FFmpeg.wasm. Users select a video and the browser does the conversion locally. The application has no application backend, accounts, analytics, upload endpoint or database.
